@@ -47,7 +47,6 @@ function createBroadcast(req, res) {
 
 }
 
-
 function listBroadcasts(req, res) {
 
     if (Object.keys(req.query).length > 0) {
