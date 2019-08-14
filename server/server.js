@@ -81,7 +81,7 @@ process.on('SIGINT', function () {
 var boloController = require('./controllers/bolo.controller.js');
 var broadcastController = require('./controllers/broadcast.controller.js');
 var authenticationController = require('./controllers/authentication.controller.js');
-var userController = require('./controllers/user.controller.js');
+//var userController = require('./controllers/user.controller.js');
 
 /** Initialise authentication */
 var authenticate = jwt({
@@ -95,4 +95,4 @@ var authenticate = jwt({
 app.use('/api/v1/authentication', authenticationController);
 app.use('/api/v1/bolos', authenticate, boloController);
 app.use('/api/v1/broadcasts', authenticate, broadcastController);
-app.use('/api/v1/users', authenticate, userController);
+//app.use('/api/v1/users', authenticate, userController);

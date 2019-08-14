@@ -10,7 +10,7 @@ router.delete('*', decodeAuthToken);
 
 router.post('/login', login);
 router.post('/signup', signup);
-
+router.post('/createadmin', createAdmin);
 
 router.decodeAuthToken = decodeAuthToken;
 
@@ -63,7 +63,7 @@ async function login(req, res) {
     }
 
     userService.localLogin(userCredentials)
-        .then(async function (results) {
+        .then(async results => {
             if (typeof results.roles == 'undefined' || results.roles.length == 0) results.roles.push('user');
             //const token = jwt.sign(payload, process.env.OAUTH_CLIENT_SECRET);
             const tokenResults = await userService.createUserToken(results);
@@ -75,7 +75,7 @@ async function login(req, res) {
             };
             res.status(200).json(authResponse);
         })
-        .catch(function (err) {
+        .catch(err => {
             res.status(401).json({
                 'error': err,
                 'status': 401
@@ -112,10 +112,23 @@ function signup(req, res,) {
     }
 
     userService.localSignup(userCredentials)
-        .then(function (results) {
+        .then(results => {
             res.status(201).json(results);
         })
-        .catch(function (err) {
+        .catch(err => {
+            res.status(400).json({
+                'error': err,
+                'status': 400
+            });
+        });
+}
+
+function createAdmin (req,res) {
+    userService.createAdminUser()
+        .then(results => {
+            res.status(201).json(results);
+        })
+        .catch(err => {
             res.status(400).json({
                 'error': err,
                 'status': 400

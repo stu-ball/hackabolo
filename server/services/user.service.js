@@ -191,7 +191,7 @@ function createAdminUser() {
         username: 'admin',
         firstName: 'Admin',
         lastName: 'User',
-        password: sha256(process.env.SECRET + process.env.ROOTPW),
+        password: sha256(process.env.SALT + process.env.ROOTPW),
         email: 'noreply@noemail.com',
         createdAt: Date.now(),
         roles: ['user', 'boloCreator', 'broadcastCreator', 'boloApprover', 'broadcastApprover', 'admin']
