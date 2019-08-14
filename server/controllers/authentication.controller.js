@@ -11,6 +11,7 @@ router.delete('*', decodeAuthToken);
 router.post('/login', login);
 router.post('/signup', signup);
 
+
 router.decodeAuthToken = decodeAuthToken;
 
 module.exports = router;
@@ -80,5 +81,44 @@ async function login(req, res) {
                 'status': 401
             });
         });
+}
 
+function signup(req, res,) {
+    var formData = {};
+    try {
+        formData = JSON.parse(req.body);
+    } catch (ex) {
+        formData = req.body;
+    }
+
+    var userCredentials = _.pick(formData, [
+        'username',
+        'password',
+        'verifyPassword',
+        'email',
+        'mobile',
+        'firstName',
+        'lastName',
+        'mobile',
+        'roles'
+    ]);
+
+    if (userCredentials.password != userCredentials.verifyPassword) {
+        res.status(400).json({
+            'error': 'Passwords do not match',
+            'status': 400
+        });
+        return;
+    }
+
+    userService.localSignup(userCredentials)
+        .then(function (results) {
+            res.status(201).json(results);
+        })
+        .catch(function (err) {
+            res.status(400).json({
+                'error': err,
+                'status': 400
+            });
+        });
 }

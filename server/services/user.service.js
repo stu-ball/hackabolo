@@ -103,7 +103,7 @@ function decodeToken(authorization) {
     return deferred.promise;
 }
 
-function signup(userCredentials, roles) {
+function signup(userCredentials) {
     var deferred = Q.defer();
     var passedCheck = true;
 
@@ -139,7 +139,7 @@ function signup(userCredentials, roles) {
         newUser.email = email;
         newUser.picture = picture;
         newUser.createdAt = now;
-        newUser.roles = roles;
+        newUser.roles = userCredentials.roles;
         newUser.save(function (err, user) {
             if (err) {
                 console.log(err.name + ': ' + err.message);
