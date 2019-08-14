@@ -16,7 +16,6 @@ var BroadcastSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    status: String,
     type: String,
     urgent: Boolean,
     validFrom: {
@@ -52,6 +51,11 @@ var BroadcastSchema = mongoose.Schema({
         type: Boolean,
         default: false,
         index: true
+    },
+    approved: {
+        type: Boolean,
+        default: false,
+        index: true
     }
 });
 
@@ -68,6 +72,7 @@ service.read = read;
 service.update = update;
 service.search = search;
 service.disable = disable;
+service.approve = approve;
 
 service.Broadcast = Broadcast;
 
@@ -193,6 +198,34 @@ function disable(id, updatedBy) {
             results.inactive = true;
             results.updatedBy = updatedBy;
             results.updatedAt = Date();
+            results.save(function (err, object) {
+                if (err) return deferred.reject(err.name + ': ' + err.message);
+                deferred.resolve(object);
+            });
+        } else {
+            deferred.reject('No record found');
+        }
+    });
+    return deferred.promise;
+}
+
+function approve(id, approvedBy) {
+    var deferred = Q.defer();
+
+    Broadcast.findOne({
+        '_id': id
+    }, function (err, results) {
+        if (err) {
+            console.log(err.name + ': ' + err.message);
+            deferred.reject(err.name + ': ' + err.message);
+        }
+
+        if (results) {
+            results.approved = true;
+            results.updatedBy = approvedBy;
+            results.approvedBy = approvedBy;
+            results.updatedAt = Date();
+            results.approvedAt = Date();
             results.save(function (err, object) {
                 if (err) return deferred.reject(err.name + ': ' + err.message);
                 deferred.resolve(object);
