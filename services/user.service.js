@@ -75,6 +75,8 @@ service.login = login;
 service.createAdminUser = createAdminUser;
 service.decodeToken = decodeToken;
 service.createUserToken = createUserToken;
+service.deleteUsers = deleteUsers;
+service.deleteUser = deleteUser;
 service.User = User;
 
 module.exports = service;
@@ -106,7 +108,7 @@ function decodeToken(authorization) {
 function signup(userCredentials) {
     var deferred = Q.defer();
     var passedCheck = true;
-
+    
     // Make sure username, password and email fields are not empty
     if (typeof userCredentials.username == 'undefined' ||
         typeof userCredentials.password == 'undefined' ||
@@ -121,13 +123,14 @@ function signup(userCredentials) {
     if (typeof userCredentials.password != 'undefined') {
         if (userCredentials.password.length < process.env.PASSWORD_LENGTH) {
             passedCheck = false;
+
             deferred.reject('Password must be at least ' + process.env.PASSWORD_LENGTH + ' characters long.');
         } else {
             passedCheck = true;
         }
     }
 
-    if (passedCheck) {
+    if (passedCheck == true) {
         const passwordHash = sha256(process.env.SECRET + userCredentials.password);
         const username = _.toLower(userCredentials.username);
         const email = _.toLower(userCredentials.email);
@@ -253,4 +256,32 @@ function createUserToken(user) {
 
     return deferred.promise;
 
+}
+
+function deleteUsers() {
+    var deferred = Q.defer();
+
+    User.deleteMany({})
+    .then(result => {
+        deferred.resolve('Users deleted');
+    })
+    .catch(err => {
+        deferred.reject('User deletion failed');
+    })
+
+    return deferred.promise;
+}
+
+function deleteUser(id) {
+    var deferred = Q.defer();
+
+    User.delete({_id: id})
+        .then(result => {
+            deferred.resolve('User deleted');
+        })
+        .catch(err => {
+            deferred.reject('User deletion failed');
+        })
+
+    return deferred.promise;
 }

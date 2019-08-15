@@ -1,7 +1,7 @@
 require('dotenv').config();
 var express = require('express');
 var _ = require('lodash');
-var BoloService = require('../services/Bolo.service');
+var BoloService = require('../services/bolo.service');
 var authenticationController = require('./authentication.controller');
 
 var router = express.Router();

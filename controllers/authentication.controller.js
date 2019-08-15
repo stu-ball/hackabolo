@@ -99,10 +99,9 @@ function signup(req, res,) {
         'mobile',
         'firstName',
         'lastName',
-        'mobile',
         'roles'
     ]);
-
+    
     if (userCredentials.password != userCredentials.verifyPassword) {
         res.status(400).json({
             'error': 'Passwords do not match',
@@ -111,7 +110,8 @@ function signup(req, res,) {
         return;
     }
 
-    userService.localSignup(userCredentials)
+
+    userService.signup(userCredentials)
         .then(results => {
             res.status(201).json(results);
         })

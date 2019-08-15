@@ -23,6 +23,7 @@ app.use(compression());  // compress all responses
  * Establish Database connection
  */
 var dbConnectionString = process.env.CONNECTION_STRING;
+if (process.env.NODE_ENV == 'test') dbConnectionString = process.env.TEST_CONNECTION_STRING;
 mongoose.connect(dbConnectionString, { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'DB connection error:'));
@@ -96,3 +97,10 @@ app.use('/api/v1/authentication', authenticationController);
 app.use('/api/v1/bolos', authenticate, boloController);
 app.use('/api/v1/broadcasts', authenticate, broadcastController);
 //app.use('/api/v1/users', authenticate, userController);
+
+if (process.env.NODE_ENV == 'test') {
+    var testController = require('./controllers/test.controller.js');
+    app.use('/api/v1/tests', testController);
+}
+
+module.exports = app;
