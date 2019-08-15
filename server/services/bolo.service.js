@@ -18,7 +18,7 @@ var BoloSchema = mongoose.Schema({
         default: 'All'
     }, 
     status: String,
-    type: String,
+    types: [String],
     subType: String,
     offence: String,
     location: String,
@@ -64,7 +64,10 @@ var BoloSchema = mongoose.Schema({
 
 
 var Bolo = mongoose.model('Bolo', BoloSchema);
-
+const m2s = require('mongoose-to-swagger');
+const swaggerSchema = m2s(Bolo);
+console.log('BOLO Model');
+console.log(swaggerSchema);
 var service = {};
 
 service.createBolo = createBolo;

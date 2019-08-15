@@ -62,6 +62,10 @@ var BroadcastSchema = mongoose.Schema({
 
 
 var Broadcast = mongoose.model('Broadcast', BroadcastSchema);
+const m2s = require('mongoose-to-swagger');
+const swaggerSchema = m2s(Broadcast);
+console.log('Broadcast Model');
+console.log(swaggerSchema);
 
 var service = {};
 
