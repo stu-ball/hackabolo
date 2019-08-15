@@ -18,8 +18,8 @@ var BoloSchema = mongoose.Schema({
         default: 'All'
     }, 
     status: String,
-    types: [String],
-    subType: String,
+    categories: [String],
+    subCategory: String,
     offence: String,
     location: String,
     contact: String,
