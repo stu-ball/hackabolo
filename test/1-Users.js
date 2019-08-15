@@ -85,6 +85,8 @@ describe('Users', function () {
             .send(standardUser)
             .end(function (err, res) {
                 res.should.have.status(201);
+                res.body.username.should.equal('standarduser');
+                res.body.should.be.an('object');
                 done();
             });
     });
