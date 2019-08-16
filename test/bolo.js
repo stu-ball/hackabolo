@@ -86,6 +86,18 @@ describe('bolo tests', function () {
             });
     });
 
+    it('it should list all bolos', function (done) {
+        chai.request(server)
+            .get('/api/v1/bolos')
+            .set('Authorization', `Bearer ${ id_token }`)
+            .send(bolo)
+            .end(function (err, res) {
+                res.should.have.status(200);
+                res.body.should.be.an('array');
+                done();
+            });
+    });
+
     it('it should login a boloApproverUser user', function (done) {
         chai.request(server)
             .post('/api/v1/authentication/login')

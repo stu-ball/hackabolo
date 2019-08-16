@@ -76,6 +76,8 @@ service.create = createBroadcast;
 service.delete = _delete;
 service.list = list;
 service.read = read;
+service.listApproved = listApproved;
+service.readApproved = readApproved;
 service.update = update;
 service.search = search;
 service.disable = disable;
@@ -124,12 +126,51 @@ function read(id) {
     return deferred.promise;
 }
 
+function readApproved(id) {
+    var deferred = Q.defer();
+
+    Broadcast.findOne({
+        '_id': id, 'approved': true
+    })
+        .populate('createdBy', '_id username')
+        .populate('updatedBy', '_id username')
+        .exec(function (err, results) {
+            if (err) {
+                console.log(err.name + ': ' + err.message);
+                deferred.reject(err.name + ': ' + err.message);
+            }
+            deferred.resolve(results);
+        });
+
+    return deferred.promise;
+}
+
 function list() {
     var deferred = Q.defer();
 
     Broadcast.find()
         .sort({
             'createdAt': -1
+        })
+        .populate('createdBy', '_id username')
+        .populate('updatedBy', '_id username')
+        .exec(function (err, results) {
+            if (err) {
+                console.log(err.name + ': ' + err.message);
+                deferred.reject(err.name + ': ' + err.message);
+            }
+            deferred.resolve(results);
+        });
+
+    return deferred.promise;
+}
+
+function listApproved() {
+    var deferred = Q.defer();
+
+    Broadcast.find()
+        .sort({
+            'createdAt': -1, 'approved': true
         })
         .populate('createdBy', '_id username')
         .populate('updatedBy', '_id username')

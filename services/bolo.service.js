@@ -132,7 +132,7 @@ function read(id) {
 function list() {
     var deferred = Q.defer();
 
-    Bolo.find()
+    Bolo.find({}, '-images')
         .sort({
             'createdAt': -1
         })
