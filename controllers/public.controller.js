@@ -14,7 +14,7 @@ function healthCheck(req, res) {
     res.status(200).json({
         'ServerTime': Date(),
         'UpTime': process.uptime(),
-        'Message': 'This is a restricted access computer system'
+        'Message': 'This is an awesome restricted access computer system'
     });
 
 }
