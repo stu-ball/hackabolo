@@ -61,7 +61,14 @@ var BoloSchema = mongoose.Schema({
     }
 });
 
-
+BoloSchema.virtual('image').get(function () {
+    if (this.images.length > 0) {
+        return this.images[0];
+    } else {
+        return '';
+    }
+    
+});
 
 var Bolo = mongoose.model('Bolo', BoloSchema);
 /* const m2s = require('mongoose-to-swagger');
@@ -208,7 +215,7 @@ function search(query) {
     var deferred = Q.defer();
     if (typeof query.inactive == 'undefined') query.inactive = false;
 
-    Bolo.find(query)
+    Bolo.find(query, '-images')
         .sort({
             'createdAt': -1
         })
