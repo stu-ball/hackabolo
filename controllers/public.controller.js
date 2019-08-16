@@ -15,7 +15,7 @@ function healthCheck(req, res) {
         'ServerTime': Date(),
         'UpTime': process.uptime(),
         'Message': 'This is an awesome restricted access computer system',
-        'Version': '1.1'
+        'Version': '1.2'
     });
 
 }
