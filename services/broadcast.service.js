@@ -22,7 +22,10 @@ var BroadcastSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    validTo: Date,
+    validTo: {
+        type: Date,
+        default: new Date(+new Date() + 365 * 24 * 60 * 60 * 1000)
+    }, // 1 year by default,
     createdBy: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -69,7 +72,7 @@ console.log(JSON.stringify(swaggerSchema)); */
 
 var service = {};
 
-service.createBroadcast = createBroadcast;
+service.create = createBroadcast;
 service.delete = _delete;
 service.list = list;
 service.read = read;
@@ -144,26 +147,16 @@ function list() {
 function update(id, doc) {
     var deferred = Q.defer();
 
-    Broadcast.findOne({
+    Broadcast.updateOne({
         '_id': id
-    }, function (err, results) {
+    }, doc, function (err, results) {
         if (err) {
             console.log(err.name + ': ' + err.message);
             deferred.reject(err.name + ': ' + err.message);
         }
 
         if (results) {
-            if (typeof doc.content != 'undefined') results.content = doc.content;
-            if (typeof doc.subject != 'undefined') results.subject = doc.subject;
-            if (typeof doc.updatedBy != 'undefined') results.updatedBy = doc.updatedBy;
-            /**
-             * TODO: Add the additional fields to be updated based on the schema
-             */
-            results.updatedAt = Date();
-            results.save(function (err, object) {
-                if (err) return deferred.reject(err.name + ': ' + err.message);
-                deferred.resolve(object);
-            });
+            deferred.resolve(results);
         } else {
             deferred.reject('No record found');
         }

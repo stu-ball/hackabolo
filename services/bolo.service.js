@@ -144,26 +144,16 @@ function list() {
 function update(id, doc) {
     var deferred = Q.defer();
 
-    Bolo.findOne({
+    Bolo.updateOne({
         '_id': id
-    }, function (err, results) {
+    },doc, function (err, results) {
         if (err) {
             console.log(err.name + ': ' + err.message);
             deferred.reject(err.name + ': ' + err.message);
         }
 
         if (results) {
-            if (typeof doc.details != 'undefined') results.details = doc.details;
-            if (typeof doc.subject != 'undefined') results.subject = doc.subject;
-            if (typeof doc.updatedBy != 'undefined') results.updatedBy = doc.updatedBy;
-            /**
-             * TODO: Add the additional fields to be updated based on the schema
-             */
-            results.updatedAt = Date();
-            results.save(function (err, object) {
-                if (err) return deferred.reject(err.name + ': ' + err.message);
-                deferred.resolve(object);
-            });
+            deferred.resolve(results);
         } else {
             deferred.reject('No record found');
         }

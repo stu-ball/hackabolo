@@ -26,6 +26,7 @@ function createBroadcast(req, res) {
     form_data.updatedBy = req.userId;
 
     if (req.isBroadcastCreator || req.isBroadcastApprover || req.isAdmin) {
+
         broadcastService.create(form_data)
             .then(function (results) {
                 console.log('Broadcast added');
