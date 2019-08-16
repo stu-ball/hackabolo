@@ -31,6 +31,7 @@ async function decodeAuthToken(req, res, next) {
         req.userId = userObject.id;
         req.userObject = userObject;
         if (userObject.isAdmin) req.isAdmin = true;
+        if (userObject.isBoloCreator) req.isBoloCreator = true;
         if (userObject.isBroadcastCreator) req.isBroadcastCreator = true;
         if (userObject.isBoloApprover) req.isBoloApprover = true;
         if (userObject.isBroadcastApprover) req.isBroadcastApprover = true;

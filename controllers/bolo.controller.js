@@ -26,6 +26,7 @@ function createBolo(req, res) {
     form_data.updatedBy = req.userId;
 
     if (req.isBoloCreator || req.isBoloApprover || req.isAdmin) {
+
         BoloService.create(form_data)
             .then(function (results) {
                 console.log('Bolo added');

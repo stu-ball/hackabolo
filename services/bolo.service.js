@@ -70,13 +70,14 @@ console.log('BOLO Model');
 console.log(JSON.stringify(swaggerSchema)); */
 var service = {};
 
-service.createBolo = createBolo;
+service.create = createBolo;
 service.delete = _delete;
 service.list = list;
 service.read = read;
 service.update = update;
 service.search = search;
 service.disable = disable;
+service.approve = approve;
 
 service.Bolo = Bolo;
 
@@ -222,3 +223,30 @@ function search(query) {
     return deferred.promise;
 }
 
+function approve(id, approvedBy) {
+    var deferred = Q.defer();
+
+    Bolo.findOne({
+        '_id': id
+    }, function (err, results) {
+        if (err) {
+            console.log(err.name + ': ' + err.message);
+            deferred.reject(err.name + ': ' + err.message);
+        }
+
+        if (results) {
+            results.approved = true;
+            results.updatedBy = approvedBy;
+            results.approvedBy = approvedBy;
+            results.updatedAt = Date();
+            results.approvedAt = Date();
+            results.save(function (err, object) {
+                if (err) return deferred.reject(err.name + ': ' + err.message);
+                deferred.resolve(object);
+            });
+        } else {
+            deferred.reject('No record found');
+        }
+    });
+    return deferred.promise;
+}
