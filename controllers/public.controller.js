@@ -13,7 +13,8 @@ function healthCheck(req, res) {
 
     res.status(200).json({
         'ServerTime': Date(),
-        'UpTime': process.uptime()
+        'UpTime': process.uptime(),
+        'Message': 'This is a restricted access computer system'
     });
 
 }
