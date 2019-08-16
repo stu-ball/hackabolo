@@ -62,11 +62,13 @@ async function login(req, res) {
         });
     }
 
-    userService.localLogin(userCredentials)
+
+    userService.login(userCredentials.username, userCredentials.password)
         .then(async results => {
             if (typeof results.roles == 'undefined' || results.roles.length == 0) results.roles.push('user');
             //const token = jwt.sign(payload, process.env.OAUTH_CLIENT_SECRET);
             const tokenResults = await userService.createUserToken(results);
+
             const authResponse = {
                 id_token: tokenResults.token,
                 expires_in: tokenResults.expiresIn,

@@ -33,6 +33,7 @@ var userSchema = mongoose.Schema({
     lastName: String,
     mobile: String,
     picture: String,
+    roles: [String],
     createdAt: {
         type: Date,
         index: true
@@ -131,7 +132,7 @@ function signup(userCredentials) {
     }
 
     if (passedCheck == true) {
-        const passwordHash = sha256(process.env.SECRET + userCredentials.password);
+        const passwordHash = sha256(process.env.SALT + userCredentials.password);
         const username = _.toLower(userCredentials.username);
         const email = _.toLower(userCredentials.email);
         const picture = 'https://www.gravatar.com/avatar/' + md5(email);
@@ -160,7 +161,6 @@ function login(username, password) {
 
     const passwordHash = sha256(process.env.SALT + password);
     username = _.toLower(username);
-
     User.findOne({
         username: username,
         password: passwordHash
@@ -170,7 +170,6 @@ function login(username, password) {
             console.log(err.name + ': ' + err.message);
             deferred.reject(err.name + ': ' + err.message);
         }
-
         if (user) {
             if (user.inactive) {
                 deferred.reject('Account disabled');
@@ -189,7 +188,6 @@ function login(username, password) {
 // This function creates the admin user
 function createAdminUser() {
     var deferred = Q.defer();
-    console.log('User Service: createAdminUser');
     var newAdminUser = new User({
         username: 'admin',
         firstName: 'Admin',
@@ -204,7 +202,6 @@ function createAdminUser() {
             console.log(err.name + ': ' + err.message);
             deferred.reject(err.name + ': ' + err.message);
         }
-        console.log('User service: Admin user created: ', results);
         deferred.resolve(results);
     });
 
@@ -217,7 +214,6 @@ function createUserToken(user) {
     const now = parseInt(Date.now() / 1000);
     const expires_in = parseInt(process.env.TOKEN_USER_EXPIRY);
     const expires_at = now + expires_in;
-
     const payload = {
         id: user._id,
         username: user.username,
@@ -237,7 +233,6 @@ function createUserToken(user) {
         iat: now,
         exp: expires_at
     };
-
     jwt.sign(payload, process.env.OAUTH_CLIENT_SECRET, function (err, token) {
 
         if (err) deferred.reject('Token create failed');
@@ -249,6 +244,7 @@ function createUserToken(user) {
                 expiresIn: expires_in
             });
         } else {
+            console.log('Token create failed');
             deferred.reject('Token create failed');
         }
 
@@ -262,12 +258,12 @@ function deleteUsers() {
     var deferred = Q.defer();
 
     User.deleteMany({})
-    .then(result => {
-        deferred.resolve('Users deleted');
-    })
-    .catch(err => {
-        deferred.reject('User deletion failed');
-    })
+        .then(result => {
+            deferred.resolve('Users deleted');
+        })
+        .catch(err => {
+            deferred.reject('User deletion failed');
+        })
 
     return deferred.promise;
 }

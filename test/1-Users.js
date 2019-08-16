@@ -11,7 +11,7 @@ chai.use(chaiHttp);
 var expect = require('chai').expect;
 
 const standardUser = {
-    username: 'standardUser',
+    username: 'standarduser',
     password: 'password1password1',
     verifyPassword: 'password1password1',
     email: 'standardUser@test.com',
@@ -22,7 +22,7 @@ const standardUser = {
 };
 
 const badPasswordUser = {
-    username: 'standardUser',
+    username: 'standarduser',
     password: 'password1',
     verifyPassword: 'password1',
     email: 'standardUser@test.com',
@@ -33,7 +33,7 @@ const badPasswordUser = {
 };
 
 const boloCreatorUser = {
-    username: 'boloCreatorUser',
+    username: 'bolocreatoruser',
     password: 'password1password1',
     verifyPassword: 'password1password1',
     email: 'standardUser@test.com',
@@ -44,7 +44,7 @@ const boloCreatorUser = {
 };
 
 const boloApproverUser = {
-    username: 'boloApproverUser',
+    username: 'boloapproveruser',
     password: 'password1password1',
     verifyPassword: 'password1password1',
     email: 'standardUser@test.com',
@@ -55,7 +55,7 @@ const boloApproverUser = {
 };
 
 const broadcastCreatorUser = {
-    username: 'broadcastCreatorUser',
+    username: 'broadcastcreatoruser',
     password: 'password1password1',
     verifyPassword: 'password1password1',
     email: 'standardUser@test.com',
@@ -66,7 +66,7 @@ const broadcastCreatorUser = {
 };
 
 const broadcastApproverUser = {
-    username: 'broadcastApproverUser',
+    username: 'broadcastapproveruser',
     password: 'password1password1',
     verifyPassword: 'password1password1',
     email: 'standardUser@test.com',
@@ -76,8 +76,8 @@ const broadcastApproverUser = {
     roles: ['user', 'broadcastApprover']
 };
 
-// Remove test users
-describe('Users', function () {
+// Create test users
+describe('Test Create Users', function () {
 
     it('it should create a standard user', function (done) {
         chai.request(server)
@@ -142,3 +142,94 @@ describe('Users', function () {
     });
 });
 
+// Create test users
+describe('Login Test Users', function () {
+
+    it('it should login a standard user', function (done) {
+        chai.request(server)
+            .post('/api/v1/authentication/login')
+            .send({
+                username: standardUser.username, 
+                password: standardUser.password
+            })
+            .end(function (err, res) {
+                res.should.have.status(200);
+                res.body.should.be.an('object');
+                res.body.user.username.should.equal(standardUser.username);
+                done();
+            });
+    });
+
+    it('it should login a boloCreatorUser user', function (done) {
+        chai.request(server)
+            .post('/api/v1/authentication/login')
+            .send({
+                username: boloCreatorUser.username,
+                password: boloCreatorUser.password
+            })
+            .end(function (err, res) {
+                res.should.have.status(200);
+                res.body.should.be.an('object');
+                res.body.user.username.should.equal(boloCreatorUser.username);
+                done();
+            });
+    });
+
+    it('it should login a boloApproverUser user', function (done) {
+        chai.request(server)
+            .post('/api/v1/authentication/login')
+            .send({
+                username: boloApproverUser.username,
+                password: boloApproverUser.password
+            })
+            .end(function (err, res) {
+                res.should.have.status(200);
+                res.body.should.be.an('object');
+                res.body.user.username.should.equal(boloApproverUser.username);
+                done();
+            });
+    });
+
+    it('it should login a broadcastCreatorUser user', function (done) {
+        chai.request(server)
+            .post('/api/v1/authentication/login')
+            .send({
+                username: broadcastCreatorUser.username,
+                password: broadcastCreatorUser.password
+            })
+            .end(function (err, res) {
+                res.should.have.status(200);
+                res.body.should.be.an('object');
+                res.body.user.username.should.equal(broadcastCreatorUser.username);
+                done();
+            });
+    });
+
+    it('it should login a broadcastApproverUser user', function (done) {
+        chai.request(server)
+            .post('/api/v1/authentication/login')
+            .send({
+                username: broadcastApproverUser.username,
+                password: broadcastApproverUser.password
+            })
+            .end(function (err, res) {
+                res.should.have.status(200);
+                res.body.should.be.an('object');
+                res.body.user.username.should.equal(broadcastApproverUser.username);
+                done();
+            });
+    });
+
+    it('it should NOT login a user with the wrong password', function (done) {
+        chai.request(server)
+            .post('/api/v1/authentication/login')
+            .send({
+                username: standardUser.username,
+                password: badPasswordUser.password
+            })
+            .end(function (err, res) {
+                res.should.have.status(401);
+                done();
+            });
+    });
+});

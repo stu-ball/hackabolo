@@ -64,10 +64,10 @@ var BoloSchema = mongoose.Schema({
 
 
 var Bolo = mongoose.model('Bolo', BoloSchema);
-const m2s = require('mongoose-to-swagger');
+/* const m2s = require('mongoose-to-swagger');
 const swaggerSchema = m2s(Bolo);
 console.log('BOLO Model');
-console.log(swaggerSchema);
+console.log(JSON.stringify(swaggerSchema)); */
 var service = {};
 
 service.createBolo = createBolo;
