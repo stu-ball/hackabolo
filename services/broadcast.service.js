@@ -168,9 +168,9 @@ function list() {
 function listApproved() {
     var deferred = Q.defer();
 
-    Broadcast.find()
+    Broadcast.find({'approved': true })
         .sort({
-            'createdAt': -1, 'approved': true
+            'createdAt': -1
         })
         .populate('createdBy', '_id username')
         .populate('updatedBy', '_id username')
