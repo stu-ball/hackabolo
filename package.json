@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "set NODE_ENV=dev && node server.js",
-    "tests": "set NODE_ENV=test &&  mocha lib/test/*.js --reporter mocha-junit-reporter --reporter-options mochaFile=./TestResults/TEST-RESULT.xml --exit"
+    "tests": "set NODE_ENV=test &&  mocha --reporter mocha-junit-reporter --reporter-options mochaFile=./TestResults/TEST-RESULT.xml --exit"
   },
   "author": "Hai Tran",
   "license": "UNLICENSED",
